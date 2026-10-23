@@ -1,0 +1,34 @@
+t00 - the official image, fetched and checked
+Date: 2026-10-22. Lab host: Ubuntu 24.04 sandbox
+with no container runtime, so the image was
+pulled apart layer by layer instead of run.
+
+Image:  docker.io/jketterl/openwebrx:stable
+Digest: sha256:58686d24893664f7a72570ad8e1bf1
+        06f980dac4fccfe84af2b6e2486557e2ba
+Layers: 11, every layer's sha256 verified
+        against the registry manifest after
+        download (a fetch script resumed and
+        re-checked each blob).
+
+Version inside the image, from
+opt/openwebrx/owrx/version.py:
+
+    _versionstring = "1.2.2"
+
+Base system of the image: Debian bullseye,
+Python 3.9, service supervision by s6-overlay
+(entrypoint /init), application started by
+docker/scripts/run.sh as:
+
+    python3 openwebrx.py
+
+Key payload versions found on the image
+filesystem (usr/local/bin):
+
+    owrx_connector    0.6.2
+    rtl_connector     0.6.2
+    soapy_connector   (present)
+    codecserver       (present)
+    csdr / pycsdr     (python module imports
+                       cleanly, 36 exports)

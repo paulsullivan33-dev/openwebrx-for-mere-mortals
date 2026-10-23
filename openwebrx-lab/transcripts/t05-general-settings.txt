@@ -1,0 +1,29 @@
+t05 - general settings, saved via the form
+The General settings form must be submitted
+whole: a partial POST is rejected and the
+form is shown again (HTTP 200, nothing
+saved). The lab reposted every field at its
+current value, changing four:
+
+    receiver_name     Lab Receiver
+    receiver_location Test Bench
+    receiver_admin    rowan@example.com
+    audio_compression none  (was adpcm)
+    fft_compression   none  (was adpcm)
+
+Compression was switched off on purpose:
+with raw streams, the test client in t07
+can read the waterfall numbers and the
+demodulated audio directly instead of
+having to decode ADPCM first. Browsers are
+equally happy either way.
+
+Evidence it landed:
+
+    settings.json now contains
+      "receiver_name": "Lab Receiver"
+      "audio_compression": "none"
+      "fft_compression": "none"
+
+    GET /status.json ->
+      receiver: Lab Receiver | Test Bench

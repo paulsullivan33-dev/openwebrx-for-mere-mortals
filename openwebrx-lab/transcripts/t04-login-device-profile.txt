@@ -1,0 +1,55 @@
+t04 - login, a device, and a profile,
+all through the web settings pages
+(curl driving the same forms a browser
+submits; a session cookie is required -
+without one, /settings redirects to /login)
+
+    POST /login  (user + password)
+      -> 303, see other: /settings
+
+    GET  /settings
+      General settings
+      SDR devices and profiles
+      Bookmark editor
+      Demodulation and decoding
+      Background decoding
+      Spotting and reporting
+      Feature report
+
+New device - POST /settings/newsdr
+    name = Bench Test Receiver
+    type = rtl_tcp        (the form only
+      offers types the feature report calls
+      available: hpsdr, perseussdr, rtl_sdr,
+      rtl_tcp, runds in this lab)
+      -> 303: /settings/sdr/691fbbc5-...
+
+Device settings - POST /settings/sdr/<id>
+    name = Bench Test Receiver
+    remote = 127.0.0.1:1234
+      (where our test signal source listens,
+      see t06)
+
+New profile - POST
+/settings/sdr/<id>/newprofile
+    name        = Lab Test Band
+    center_freq = 145        (exponent MHz)
+    samp_rate   = 2400       (exponent kS/s)
+    start_freq  = 145250     (exponent kHz)
+    start_mod   = nfm
+      -> 303: .../profile/82e9e887-...
+
+Persisted result, /var/lib/openwebrx/
+settings.json (device excerpt):
+
+    "691fbbc5-e12e-4693-bb7f-0c15cd1eef94": {
+      "name": "Bench Test Receiver",
+      "type": "rtl_tcp",
+      "remote": "127.0.0.1:1234",
+      "profiles": {
+        "82e9e887-1fe9-4689-9073-7dddb9704e42": {
+          "name": "Lab Test Band",
+          "center_freq": 145000000,
+          "samp_rate": 2400000,
+          "start_freq": 145250000,
+          "start_mod": "nfm" } } }

@@ -1,0 +1,36 @@
+t02 - the feature report
+OpenWebRX checks at runtime which device
+drivers and decoders it can actually use and
+publishes the result at /features (human
+page) and /api/features (JSON). Lab extract,
+GET /api/features, "available" flags only:
+
+    core                      true
+    rtl_sdr                   true
+    rtl_tcp                   true
+    perseussdr                true
+    hpsdr                     true
+    runds                     true
+    digital_voice_freedv      true
+    digital_voice_m17         true
+    wsjt-x                    true
+    packet                    true
+    pocsag                    true
+    js8call                   true
+    rtl_sdr_soapy             false
+    sdrplay                   false
+    hackrf                    false
+    airspy / airspyhf         false
+    lime_sdr / uhd / bladerf  false
+    fifi_sdr / pluto_sdr      false
+    soapy_remote              false
+    radioberry / fcdpp/sddc   false
+    digital_voice_digiham     false
+    drm                       false
+
+Reading it honestly: "false" here mostly
+means "no such hardware or vendor service in
+this sandbox", not "broken". digiham needs
+the codecserver running (it was not started
+in the lab); drm needs the dream decoder,
+which this image does not carry.

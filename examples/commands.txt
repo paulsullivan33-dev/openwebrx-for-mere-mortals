@@ -1,0 +1,41 @@
+Commands from the guide, in one place.
+Run the admin command inside the install
+(Docker: docker exec -it openwebrx <cmd>;
+the program is openwebrx.py in its install
+directory on the official image).
+
+Start (Docker route)
+    docker compose up -d
+    docker compose logs -f openwebrx
+
+Is it alive? What does it think it has?
+    curl http://localhost:8073/status.json
+    curl http://localhost:8073/api/features
+
+First admin, at a keyboard (prompts)
+    openwebrx admin adduser rowan
+
+First admin, from a script (no terminal)
+    OWRX_PASSWORD='...' \
+      openwebrx admin --noninteractive \
+      adduser rowan
+
+Account toolbox
+    openwebrx admin listusers
+    openwebrx admin hasuser rowan
+    openwebrx admin resetpassword rowan
+    openwebrx admin disableuser rowan
+    openwebrx admin enableuser rowan
+    openwebrx admin removeuser rowan
+
+Backup (the whole receiver, five files)
+    /var/lib/openwebrx/settings.json
+    /var/lib/openwebrx/users.json
+    /var/lib/openwebrx/bookmarks.json
+    /etc/openwebrx/openwebrx.conf
+    /etc/openwebrx/bands.json
+
+Test source for the no-hardware rig
+(recipe 3) - then point an rtl_tcp device
+at 127.0.0.1:1234
+    python3 examples/fake-rtltcp.py 1234

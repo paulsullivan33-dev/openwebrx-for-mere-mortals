@@ -1,0 +1,36 @@
+t06 - the test signal source, and what the
+real connector said to it
+The sandbox has no radio hardware, so the
+lab wrote a synthetic rtl_tcp server
+(examples/fake-rtltcp.py): it speaks the
+rtl_tcp protocol and streams precomputed
+I/Q samples - a noise floor plus three
+signals, in a 2.4 MHz window:
+
+    -170 kHz   AM carrier, 700 Hz tone
+       0 kHz   weak steady carrier
+    +250 kHz   FM carrier, 1 kHz tone,
+               +/-4 kHz deviation
+    +600 kHz   strong steady carrier
+
+When the first listener connected (t07),
+OpenWebRX started rtl_tcp_connector 0.6.2,
+which connected to the fake server and
+drove it exactly as it would a real
+rtl_tcp daemon. Server-side log:
+
+    fake rtl_tcp server listening on
+      127.0.0.1:1234
+    client connected from ('127.0.0.1', ...)
+    command 0x01: set center frequency
+                  = 145000000
+    command 0x02: set sample rate = 2400000
+    command 0x05: set ppm = 0
+    command 0x03: set gain mode = 0
+    command 0x0e: set bias tee = 0
+    client disconnected
+
+Centre frequency and sample rate match the
+profile from t04. When the listener left,
+the connector disconnected - an idle
+receiver stops its device.

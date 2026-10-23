@@ -1,0 +1,38 @@
+t03 - creating the admin user
+The lab admin is an invented fixture user,
+"rowan". Created non-interactively, the way
+scripts (and the Docker image's own startup
+script) do it:
+
+    $ OWRX_PASSWORD=<password>
+      ./openwebrx.py admin --noninteractive
+        adduser rowan
+    Creating user rowan...
+
+    $ ./openwebrx.py admin --silent
+        hasuser rowan ; echo $?
+    0
+
+    $ ./openwebrx.py admin listusers
+    rowan
+
+Subcommands available (admin --help):
+    adduser removeuser resetpassword
+    listusers disableuser enableuser hasuser
+
+/var/lib/openwebrx/users.json afterwards
+(password hash shortened here on purpose):
+
+    [ { "user": "rowan",
+        "enabled": true,
+        "must_change_password": false,
+        "password": "pbkdf2_sha256$..." } ]
+
+A trap worth recording: without
+--noninteractive, adduser prompts with
+getpass() on /dev/tty and waits forever in
+a session with no terminal attached, even
+when OWRX_PASSWORD is set - the environment
+variable is only honoured in noninteractive
+mode. The interactive prompt is the right
+route at a real keyboard.

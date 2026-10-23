@@ -1,0 +1,36 @@
+# OpenWebRX, the official Docker route.
+# All names and the password are invented
+# fixtures - change them before real use.
+#
+# The two OPENWEBRX_ADMIN_* variables are a
+# bootstrap: at first start, if the user
+# does not exist yet, it is created with
+# this password. Afterwards they are
+# ignored (chapter 4).
+services:
+  openwebrx:
+    image: jketterl/openwebrx:stable
+    container_name: openwebrx
+    restart: unless-stopped
+    ports:
+      - "8073:8073"
+    environment:
+      OPENWEBRX_ADMIN_USER: "rowan"
+      OPENWEBRX_ADMIN_PASSWORD: "change-me-before-use"
+    volumes:
+      # Everything that makes this receiver
+      # *yours* lives in these two mounts
+      # (chapter 10 backs up exactly these).
+      - openwebrx-settings:/var/lib/openwebrx
+      - openwebrx-config:/etc/openwebrx
+      # Scratch, recreated at every start.
+      - openwebrx-tmp:/tmp/openwebrx
+    devices:
+      # Hand the container the USB bus so
+      # the connector can open the dongle.
+      - /dev/bus/usb:/dev/bus/usb
+
+volumes:
+  openwebrx-settings:
+  openwebrx-config:
+  openwebrx-tmp:

@@ -1,0 +1,61 @@
+t07 - listening, websocket edition
+A small python client (no browser in the
+lab) performed the same exchange the web
+page performs on ws://127.0.0.1:8073/ws/ :
+
+  1. application handshake, copied from the
+     page's own javascript:
+       -> "SERVER DE CLIENT
+           client=openwebrx.js type=receiver"
+       <- "CLIENT DE SERVER
+           server=openwebrx version=v1.2.2"
+     (Before this greeting the server answers
+     nothing at all - "handshake is not
+     complete" in its log.)
+  2. connectionproperties: output_rate 12000
+  3. selectprofile: the t04 device|profile
+  4. dspcontrol start: mod nfm,
+     offset_freq +250000, squelch open
+
+Received during 15 s:
+  JSON messages:
+    {"bookmarks": 1, "clients": 1,
+     "config": 3, "cpuusage": 5,
+     "dial_frequencies": 1, "features": 1,
+     "modes": 1, "profiles": 1,
+     "receiver_details": 1,
+     "secondary_config": 1, "smeter": 18}
+  config (excerpt):
+    {"sdr_id": "691fbbc5-...",
+     "profile_id": "82e9e887-...",
+     "samp_rate": 2400000,
+     "center_freq": 145000000,
+     "start_freq": 145250000,
+     "start_mod": "nfm"}
+  binary frames:
+    type 0x01 (waterfall FFT): 39 frames,
+      639015 bytes
+    type 0x02 (audio): 49 frames,
+      110483 bytes
+
+Waterfall, last frame: 4096 bins across
+2.4 MHz, noise floor -64.4 dB. Strongest
+bins, converted to offsets from centre:
+
+    bin 3072:  +600000 Hz   -6.4 dB
+    bin 1758:  -169922 Hz  -14.0 dB
+    bin 2480:  +253125 Hz  -17.5 dB
+    (plus its FM neighbours at +247/+250)
+
+Audio: 110434 payload bytes = int16 samples
+= 55217 samples, about 4.6 s at 12 kHz,
+RMS 0.52. A Fourier check of one second of
+it: dominant tone 1004 Hz.
+
+Compare t06: the signals were placed at
+-170 kHz (AM), +250 kHz (FM, 1 kHz tone)
+and +600 kHz. The waterfall peaks sit on
+those offsets, and the FM signal's 1 kHz
+tone is what the demodulator hands back.
+Synthetic samples in one end, the right
+spectrum and the right tone out the other.

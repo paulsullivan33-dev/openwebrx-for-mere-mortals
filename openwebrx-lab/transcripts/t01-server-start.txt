@@ -1,0 +1,51 @@
+t01 - server start and first pages
+The image filesystem was executed directly
+(its own glibc loader + python3.9), with
+/etc/openwebrx seeded from the image exactly
+as docker/scripts/run.sh seeds it.
+
+Startup log (tail):
+
+    2026-10-22 23:44:40 - owrx.__main__ - INFO
+      - OpenWebRX version v1.2.2 starting up...
+
+First start notes, recorded honestly:
+  * a one-time config migration ran
+    ("config migration ... from version 1")
+  * the log complained that the airspyhf and
+    sdrplay sample devices were "not
+    available" - their vendor services were
+    not started in this lab. The rtl_sdr
+    sample device reported the same until the
+    connector tools were put on PATH;
+    /api/features then reported rtl_sdr
+    available (see t02).
+
+Check - the web UI answers:
+
+    $ curl -s -o /dev/null -w "%{http_code}\n"
+        http://127.0.0.1:8073/
+    200
+    <title>OpenWebRX | Open Source SDR
+    Web App for Everyone!</title>
+
+Check - receiver status as JSON
+(curl http://127.0.0.1:8073/status.json):
+
+    "version": "v1.2.2",
+    "max_clients": 20,
+    "sdrs": [
+      { "name": "RTL-SDR USB Stick",
+        "type": "RtlSdrSource",
+        "profiles": [
+          {"name": "70cm Repeaters",
+           "center_freq": 438800000,
+           "sample_rate": 2400000},
+          {"name": "2m",
+           "center_freq": 145000000,
+           "sample_rate": 2048000} ] } ]
+
+    (These sample devices ship in the
+    program's built-in defaults; no
+    settings.json exists until an admin
+    first saves a change.)

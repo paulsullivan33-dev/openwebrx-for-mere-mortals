@@ -1,0 +1,24 @@
+t08 - a bookmark, added and persisted
+
+    POST /settings/bookmarks
+    (session cookie; JSON body, the same
+    call the Bookmark editor page makes)
+
+      [{"name": "Lab FM Test Signal",
+        "frequency": 145250000,
+        "modulation": "nfm"}]
+      -> 200 [{"bookmark_id": ...}]
+
+/var/lib/openwebrx/bookmarks.json:
+
+    [
+      {
+        "name": "Lab FM Test Signal",
+        "frequency": 145250000,
+        "modulation": "nfm"
+      }
+    ]
+
+Bookmarks are one global list for the
+receiver (not per profile): name, frequency
+in Hz, and the mode to switch to.

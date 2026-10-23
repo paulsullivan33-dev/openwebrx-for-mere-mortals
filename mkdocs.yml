@@ -1,0 +1,27 @@
+site_name: OpenWebRX for Mere Mortals
+site_description: Plain-language web software-defined radio. One receiver and one antenna shared by every browser on your network, with devices and profiles, the waterfall, bookmarks, users, background decoding, and an honest account of what one dongle cannot do.
+site_url: https://paulsullivan33-dev.github.io/openwebrx-for-mere-mortals/
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What OpenWebRX Is: what-openwebrx-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Installing OpenWebRX: installing.md
+  - First Login and the Admin User: first-login-and-admin.md
+  - Devices and Profiles: devices-and-profiles.md
+  - Listening in the Browser: listening-in-the-browser.md
+  - Bookmarks and Settings: bookmarks-and-settings.md
+  - Users and Access: users-and-access.md
+  - Background Decoding: background-decoding.md
+  - Backing Up and Upgrading: backing-up-and-upgrading.md
+  - Recipes: recipes.md
+  - The Neighbours: the-neighbours.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

@@ -1,0 +1,51 @@
+How this guide was verified (summary;
+the full ledger is criteria.md and the
+evidence is openwebrx-lab/transcripts/).
+
+The lab machine runs no container runtime
+(mounts and device nodes are blocked), so
+the official image jketterl/openwebrx:stable
+was downloaded layer by layer, every
+digest checked, and its filesystem was
+executed directly: the image's own glibc
+loader starting its Python 3.9 on
+openwebrx.py, with /etc/openwebrx seeded
+exactly as the image's startup script
+(docker/scripts/run.sh) seeds it, and the
+image's connector tools shimmed onto PATH
+behind the same loader. Same binaries,
+same versions (1.2.2, connectors 0.6.2),
+no container around them.
+
+Two environment quirks worth recording:
+
+* Running image binaries under the host's
+  loader aborts inside glibc
+  (dl-call-libc-early-init) - the image's
+  own ld.so must lead. A small detail, but
+  it decides whether anything starts.
+
+* The sandbox blocks creating /dev nodes
+  and pseudo-terminals, which is how the
+  adduser getpass trap in transcript t03
+  was found: no terminal, no prompt,
+  infinite wait.
+
+No SDR hardware exists in the lab, so the
+receive path was proven against
+examples/fake-rtltcp.py, a synthetic
+rtl_tcp server streaming precomputed I/Q:
+noise floor plus an AM signal at -170 kHz,
+an FM signal (1 kHz tone) at +250 kHz, and
+a carrier at +600 kHz, in a 2.4 MHz window
+at 145 MHz. A scripted websocket client
+replayed the real web page's exchange
+(handshake, profile selection, DSP start),
+and the returned waterfall peaks and the
+demodulated tone matched the synthetic
+signals' placements (t06, t07).
+
+Everything beyond that point - antennas,
+tuners, real traffic, the Docker runtime
+itself - is labelled documented-only in
+criteria.md.
